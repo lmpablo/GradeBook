@@ -249,8 +249,8 @@ for num in (0..4)
         position: absolute
         right: 0
         left: 0
-        top: -23px
-        z-index: 0
+        top: -0px
+        z-index: -1
         color: white
         background: charcoal
         opacity: 0
@@ -260,6 +260,7 @@ for num in (0..4)
     &:hover:after
         z-index: 5
         opacity: 0.9
+        top: -23px
 
     
     .title, .mark, .weight
@@ -296,8 +297,8 @@ for num in (0..4)
             opacity: 0
             left: 0
             right: 30%
-            top: 0
             bottom: 0
+            top: 0!important
             padding-top: 12px
 
         &:hover:after

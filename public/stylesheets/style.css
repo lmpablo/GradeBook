@@ -400,8 +400,8 @@ h1 i {
   position: absolute;
   right: 0;
   left: 0;
-  top: -23px;
-  z-index: 0;
+  top: 0px;
+  z-index: -1;
   color: #fafafa;
   background: #303030;
   opacity: 0;
@@ -415,6 +415,7 @@ h1 i {
 .assessment-item:hover:after {
   z-index: 5;
   opacity: 0.9;
+  top: -23px;
 }
 .assessment-item .title,
 .assessment-item .mark,
@@ -458,8 +459,8 @@ h1 i {
     opacity: 0;
     left: 0;
     right: 30%;
-    top: 0;
     bottom: 0;
+    top: 0 !important;
     padding-top: 12px;
   }
   .assessment-item:hover:after {

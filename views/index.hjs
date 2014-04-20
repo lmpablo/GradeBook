@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/stylesheets/normalize.css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div class="modal-window effect-slide-left" id="add-assessment-modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Add an Assessment</h3>
+            <div>
+                <div class="row">
+                    <div class="label-container">
+                        <label for="assessment-title">Title</label>
+                    </div>
+                    <div class="field-container">
+                        <input type="text" id="assessment-title" class="text-input" placeholder="Assignment #3">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="label-container">
+                        <label for="assessment-weight">Weight</label>
+                    </div>
+                    <div class="field-container">
+                        <input type="text" id="assessment-weight" class="number-input" placeholder="15"> % of the final mark
+                    </div>
+                </div>
+                <div class="row clearfix">
+                    <div class="label-container">
+                        <label for="assessment-result">Results</label>
+                    </div>
+                    <div class="field-container">
+                        <input type="text" id="assessment-result" class="number-input" placeholder="68"> / <input type="text" id="assessment-result-total" class="number-input" placeholder="75">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="button-container">
+                        <button id="save-assessment" data-cid="-1" class="modal-button button-primary">Add Item</button> <button id="modal-close" class="modal-button button-cancel">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-window effect-slide-left" id="edit-assessment-modal">
+        <div class="modal-content">
+            <h3 class="modal-title secondary">Edit an Assessment</h3>
+            <div>
+                <div class="row">
+                    <div class="label-container">
+                        <label for="assessment-title">Title</label>
+                    </div>
+                    <div class="field-container">
+                        <input type="text" id="assessment-title" class="text-input" placeholder="Assignment #3">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="label-container">
+                        <label for="assessment-weight">Weight</label>
+                    </div>
+                    <div class="field-container">
+                        <input type="text" id="assessment-weight" class="number-input" placeholder="15"> % of the final mark
+                    </div>
+                </div>
+                <div class="row clearfix">
+                    <div class="label-container">
+                        <label for="assessment-result">Results</label>
+                    </div>
+                    <div class="field-container">
+                        <input type="text" id="assessment-result" class="number-input" placeholder="68"> / <input type="text" id="assessment-result-total" class="number-input" placeholder="75">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="button-container">
+                        <button id="update-assessment" data-aid="-1" data-cid="-1" class="modal-button button-secondary">Save Item</button> <button id="modal-close" class="modal-button button-cancel">Cancel</button> 
+                        <button id="delete-assessment" data-aid="-1" data-cid="-1" class="modal-button button-grey">Delete Item</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-window effect-slide-left" id="course-summary" data-cid="-1">
+        <div class="modal-content">
+            <h3 class="modal-title green">Course Summary</h3>
+            <div>
+                <div class="row">
+                    <p>The following is the summary for <span class="course-title">Course Title</span></p>
+                </div>
+                <div class="row">
+                    <div class="label-container">
+                        <label for="target-grade">Target Grade</label>
+                        <p class="small">Enter a grade that you'd like to get in this course.</p>
+                    </div>
+                    <div class="field-container">
+                        <input type="text" id="target-grade" class="number-input" placeholder="100">%
+                    </div>
+                </div>
+                <div class="row">
+                    <p class="no-target error-message">
+                        You currently don't have a <strong>target grade</strong>. Please enter a target grade on
+                        the space above.
+                    </p>
+                    <p class="invalid-target hidden error-message">
+                        The grade you entered is either too high or too low. Please enter a target 
+                        grade between 0 and 100.
+                    </p>
+
+                    <p>
+                        You are currently getting <span class="current-grade">50</span>.
+                    </p>
+                    <p class="proper-target hidden">
+                        In order to achieve your target of <span class="target-grade">99</span>, you 
+                        will need an average of <span class="remaining-average">50</span> for the remainder of the course.
+                    </p>
+
+                    <p>
+                        Your highest mark was <span class="highest-mark">80</span>, for 
+                        <span class="highest-assessment-title">Highest Assessment</span>. Your lowest
+                        mark was <span class="lowest-mark">10</span>, for 
+                        <span class="lowest-assessment-title">Lowest Assessment</span>.
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="button-container">
+                        <button id="modal-close" class="modal-button button-primary">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-window effect-slide-left" id="no-autosave">
+        <div class="modal-content">
+            <h3 class="modal-title primary">No Auto-Save Support</h3>
+            <div>
+                <div class="row">
+                    <p class="message">
+                        Your browser doesn't seem to support localStorage. Please use a modern browser for a better experience.
+                    </p>
+
+                    <p>
+                        You may choose to continue, but note that <strong>auto-save</strong> will not be available. Your data will be deleted as soon as you leave the app.
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="button-container">
+                        <button id="continue" class="modal-button button-primary">OK, Continue</button> <button id="modal-close" class="modal-button button-cancel">Nevermind</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay"></div>
+    <div id="wrapper" class="hidden">
+        <div class="topbar">
+            <h1>Grade<i>Book</i></h1>
+        </div>
+        <div id="main">
+            <div id="add-course-item" class="course-item-container empty">
+                <div class="course-item">
+                    <div class="content-container">
+                        <p>
+                            <i>+</i>
+                            <br>
+                            Add a New Course
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="splash-page" class="hidden">
+        <h1>Grade<i>Book</i></h1>
+        
+        <p class="description">GradeBook came from the need of keeping constant check on one's 
+            current standings for different courses and the lack of automatic way of viewing all  
+            marks in one place.</p>
+        <p class="description">Using GradeBook, <strong>collect</strong> all your marks and grades 
+            in one place, automatically <strong>calculate</strong> your current standing and even 
+            <strong>set</strong> a target grade.</p>
+
+        <span id="start-now" class="button button-blue button-large">Start Now!</span>
+        <!-- <p>Or if you have an account already, </p>
+        <span id="login" class="button button-red button-large">Log In</span> -->
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="/javascripts/script.js"></script>
+  </body>
+</html>

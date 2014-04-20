@@ -94,6 +94,7 @@ function gradeBook($, window, document) {
         function hideSplashHandler() {
             splashPageElem.addClass("fade-out");
             splashPageElem.one(transitionEnd, displayMainScreenHandler);
+            localStorage.setItem("showSplash", "false");
         }
 
         function displayMainScreenHandler() {
@@ -394,7 +395,10 @@ function gradeBook($, window, document) {
 
         function startApp() {
             if (hasStorageSupport) {
-                restoreStorage();    
+                restoreStorage();
+                if (localStorage.getItem("showSplash")) {
+                    showSplash = false;
+                } 
             }
             
             if (showSplash) {

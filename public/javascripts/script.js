@@ -280,6 +280,63 @@ function gradeBook($, window, document) {
             return assessmentItem;
         }
 
+        function courseSummaryHandler() {
+            var _this = $(this),
+                courseID = parseInt(_this.parents(".course-item-container").attr("data-cid")),
+                course = courseMap[courseID];
+
+            courseSummaryElem.attr("data-cid", courseID);
+            courseSummaryElem.find("span.course-title").text(course.title);
+            courseSummaryElem.find("span.current-grade").text(course.currentGrade.toFixed());
+            courseSummaryElem.find("span.highest-mark").text(course.getHighestAssessment().getResult().toFixed());
+            courseSummaryElem.find("span.highest-assessment-title").text(course.getHighestAssessment().title);
+            courseSummaryElem.find("span.lowest-mark").text(course.getLowestAssessment().getResult().toFixed());
+            courseSummaryElem.find("span.lowest-assessment-title").text(course.getLowestAssessment().title);
+
+            if (course.target > -1) {
+                courseSummaryElem.find("input#target-grade").val(course.target);
+                $("input#target-grade").trigger("keyup");
+            } else {
+                courseSummaryElem.find("input#target-grade").val("");
+                courseSummaryElem.find("p.proper-target").addClass("hidden");
+                courseSummaryElem.find("p.no-target").removeClass("hidden");
+            }
+            
+            courseSummaryElem.addClass("modal-show");
+        }
+
+        function targetGradeHandler() {
+            var _this = $(this),
+                courseID = parseInt(courseSummaryElem.attr("data-cid")),
+                course = courseMap[courseID],
+                target = _this.val();
+
+            if (target) {
+                courseSummaryElem.find(".error-message").addClass("hidden");
+                target = parseFloat(target);
+
+                if (target < 0 || target > 100) {
+                    courseSummaryElem.find("p.proper-target").addClass("hidden");
+                    courseSummaryElem.find("p.invalid-target").removeClass("hidden");
+                } else {
+                    var remaining = 100 - course.getTotalWeight(),
+                        remainingAverage = ((target - course.totalGrade) / remaining) * 100;
+
+                    course.target = target;
+                    courseMap[courseID] = course;
+
+                    if (hasStorageSupport) saveToStorage(courseID, course);
+                
+                    courseSummaryElem.find("span.target-grade").text(target.toFixed());
+                    courseSummaryElem.find("span.remaining-average").text(remainingAverage.toFixed());
+                    courseSummaryElem.find("p.proper-target").removeClass("hidden");
+                }
+            } else {
+                courseSummaryElem.find("p.proper-target").addClass("hidden");
+                courseSummaryElem.find("p.no-target").removeClass("hidden");
+            }
+        }
+
         function closeModalHandler() {
             $(".modal-window").removeClass("modal-show");
         }
@@ -416,65 +473,11 @@ function gradeBook($, window, document) {
                 .on('click', '.add-assessment', addModalHandler)
                 .on('click', '.assessment-item', editModalHandler)
                 .on('click', '#modal-close, .modal-overlay', closeModalHandler)
-                .on('click', '.grade-container', function() {
-                    var _this = $(this),
-                        courseID = parseInt(_this.parents(".course-item-container").attr("data-cid")),
-                        course = courseMap[courseID];
-
-                    courseSummaryElem.attr("data-cid", courseID);
-                    courseSummaryElem.find("span.course-title").text(course.title);
-                    courseSummaryElem.find("span.current-grade").text(course.currentGrade.toFixed());
-                    courseSummaryElem.find("span.highest-mark").text(course.getHighestAssessment().getResult().toFixed());
-                    courseSummaryElem.find("span.highest-assessment-title").text(course.getHighestAssessment().title);
-                    courseSummaryElem.find("span.lowest-mark").text(course.getLowestAssessment().getResult().toFixed());
-                    courseSummaryElem.find("span.lowest-assessment-title").text(course.getLowestAssessment().title);
-
-                    if (course.target > -1) {
-                        courseSummaryElem.find("input#target-grade").val(course.target);
-                        $("input#target-grade").trigger("keyup");
-                    } else {
-                        courseSummaryElem.find("input#target-grade").val("");
-                        courseSummaryElem.find("p.proper-target").addClass("hidden");
-                        courseSummaryElem.find("p.no-target").removeClass("hidden");
-                    }
-                    
-
-                    courseSummaryElem.addClass("modal-show");
-                });
+                .on('click', '.grade-container', courseSummaryHandler);
 
         addAssessmentElem.on('click', "#save-assessment", addAssessment);
         editAssessmentElem.on('click', "#update-assessment", updateAssessmentHandler);
-        courseSummaryElem.on('keyup', 'input#target-grade', function() {
-            var _this = $(this),
-                courseID = parseInt(courseSummaryElem.attr("data-cid")),
-                course = courseMap[courseID],
-                target = _this.val();
-
-            if (target) {
-                courseSummaryElem.find(".error-message").addClass("hidden");
-                target = parseFloat(target);
-
-                if (target < 0 || target > 100) {
-                    courseSummaryElem.find("p.proper-target").addClass("hidden");
-                    courseSummaryElem.find("p.invalid-target").removeClass("hidden");
-                } else {
-                    var remaining = 100 - course.getTotalWeight(),
-                        remainingAverage = ((target - course.totalGrade) / remaining) * 100;
-
-                    course.target = target;
-                    courseMap[courseID] = course;
-
-                    if (hasStorageSupport) saveToStorage(courseID, course);
-                
-                    courseSummaryElem.find("span.target-grade").text(target.toFixed());
-                    courseSummaryElem.find("span.remaining-average").text(remainingAverage.toFixed());
-                    courseSummaryElem.find("p.proper-target").removeClass("hidden");
-                }
-            } else {
-                courseSummaryElem.find("p.proper-target").addClass("hidden");
-                courseSummaryElem.find("p.no-target").removeClass("hidden");
-            } 
-        });
+        courseSummaryElem.on('keyup', 'input#target-grade', targetGradeHandler);
         
         // click-to-edit function for titles
         bodyElem.on('keyup', '.contenteditable', inlineEditHandler)

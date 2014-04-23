@@ -30,23 +30,6 @@ function gradeBook($, window, document) {
        /**
         * HELPER FUNCTIONS
         */
-        function getCourseByID(ID) {
-            for (var i = 0, len = courseCollection.length; i < len; i++) {
-                var course = courseCollection[i];
-
-                if (course.elem.data("internal-id") === ID) return course;
-            }
-            return -1;
-        }
-
-        function getAssessmentByID(cID, aID) {
-            var assessments = getCourseByID(cID).assessments;
-
-            for (var i = 0, len = assessments.length; i < len; i++) {
-                if (assessments[i].internalID === aID) return assessments[i];
-            }
-        }
-
         function fadeAndScale(elem) {
             elem.css({
                 opacity: 0,
@@ -171,11 +154,11 @@ function gradeBook($, window, document) {
         function editModalHandler() {
             var _this = $(this),
                 courseContainerElem = _this.parents(".course-item-container"),
-                courseID = parseInt(courseContainerElem.attr("data-cid")),
-                assessmentID = parseInt(_this.attr("data-aid"));
+                courseID = courseContainerElem.attr("data-cid"),
+                assessmentID = _this.attr("data-aid");
 
-            var course = courseMap[parseInt(courseID)],
-                assessment = course.assessmentMap[parseInt(assessmentID)];
+            var course = courseMap[courseID],
+                assessment = course.assessmentMap[assessmentID];
 
             editAssessmentElem.addClass("modal-show");
             editAssessmentElem.find("#update-assessment, #delete-assessment").attr("data-aid", assessmentID);
@@ -196,8 +179,8 @@ function gradeBook($, window, document) {
 
         function updateAssessmentHandler() {
             var _this = $(this),
-                assessmentID = parseInt(_this.attr("data-aid")),
-                courseID = parseInt(_this.attr("data-cid")),
+                assessmentID = _this.attr("data-aid"),
+                courseID = _this.attr("data-cid"),
                 oldAssessmentElem = $(".assessment-item[data-aid='" + assessmentID + "']");
 
             var course = courseMap[courseID],
@@ -253,7 +236,7 @@ function gradeBook($, window, document) {
             title = title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
             var cid = $(this).attr("data-cid"),
-                course = courseMap[parseInt(cid)],
+                course = courseMap[cid],
                 assessment = new Assessment(title, weight, result, resultTotal);
 
             course.insertAssessment(assessment);
@@ -282,7 +265,7 @@ function gradeBook($, window, document) {
 
         function courseSummaryHandler() {
             var _this = $(this),
-                courseID = parseInt(_this.parents(".course-item-container").attr("data-cid")),
+                courseID = _this.parents(".course-item-container").attr("data-cid"),
                 course = courseMap[courseID];
 
             courseSummaryElem.attr("data-cid", courseID);
@@ -307,7 +290,7 @@ function gradeBook($, window, document) {
 
         function targetGradeHandler() {
             var _this = $(this),
-                courseID = parseInt(courseSummaryElem.attr("data-cid")),
+                courseID = courseSummaryElem.attr("data-cid"),
                 course = courseMap[courseID],
                 target = _this.val();
 
@@ -351,7 +334,7 @@ function gradeBook($, window, document) {
                 _this.html(currText);
 
                 if (hasStorageSupport) {
-                    var id = parseInt(_this.parents(".course-item-container").attr("data-cid")),
+                    var id = _this.parents(".course-item-container").attr("data-cid"),
                         course = JSON.parse(localStorage.getItem(id)),
                         key = className.split("-")[1];
 
@@ -368,7 +351,7 @@ function gradeBook($, window, document) {
             timeoutID = setTimeout(function () {
                 if (hasStorageSupport) {
                     // Save to local storage
-                    var id = parseInt(_this.parents(".course-item-container").attr("data-cid")),
+                    var id = _this.parents(".course-item-container").attr("data-cid"),
                         course = JSON.parse(localStorage.getItem(id)),
                         key = className.split("-")[1];
 
@@ -417,7 +400,7 @@ function gradeBook($, window, document) {
             _this.removeClass("editing");
 
             if (hasStorageSupport) {
-                var id = parseInt(_this.parents(".course-item-container").attr("data-cid")),
+                var id = _this.parents(".course-item-container").attr("data-cid"),
                     course = JSON.parse(localStorage.getItem(id)),
                     key = className.split("-")[1];
 
@@ -452,7 +435,15 @@ function gradeBook($, window, document) {
 
         function startApp() {
             if (hasStorageSupport) {
-                restoreStorage();
+                if (localStorage.getItem("version") < 1) {
+                    for (item in localStorage) {
+                        delete localStorage[item];
+                    }
+                    localStorage.setItem("version", 1);
+                } else {
+                    restoreStorage();
+                }
+
                 if (localStorage.getItem("showSplash")) {
                     showSplash = false;
                 } 
@@ -529,7 +520,7 @@ function gradeBook($, window, document) {
     function Course(title, code) {
         this.title = title;
         this.code = code;
-        this.id = this.id || generateCourseID();
+        this.id = generateID("course");
 
         this.target = -1;               // user's target grade
         this.currentGrade = -1;         // weighted average so far
@@ -616,7 +607,7 @@ function gradeBook($, window, document) {
         this.weight = weight;   // stored as a percent without %; stored as 25 instead of 0.25
         this.result = result;
         this.total = total;
-        this.id = generateAssessmentID();
+        this.id = generateID("assessment");
     }
 
     Assessment.prototype.getResult = function() {
@@ -627,12 +618,13 @@ function gradeBook($, window, document) {
         return (this.result / this.total) * this.weight;
     };
 
-    function generateCourseID() {
-        return courseIDCounter++ + Date.now().toString().substr(7,3);
-    }
-
-    function generateAssessmentID() {
-        return assessmentIDCounter++ + Date.now().toString().substr(7,3);
+    // https://gist.github.com/gordonbrander/2230317
+    function generateID(type) {
+        if (type === "course") {
+            return "_c" + Math.random().toString(36).substr(2, 9);
+        } else {
+            return "_a" + Math.random().toString(36).substr(2, 9);
+        }
     }
 
     function getGradeClass(grade) {

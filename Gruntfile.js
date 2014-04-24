@@ -13,12 +13,20 @@ module.exports = function(grunt) {
                 src: "public/scripts/src/script.js",
                 dest: "public/scripts/script.min.js"
             }
+        },
+        stylus: {
+            compile: {
+                files: {
+                    'public/stylesheets/style.css': 'public/stylus/style.styl'
+                }
+            }
         }
     });
 
     // load tasks
     grunt.loadNpmTasks("grunt-contrib-uglify");
+    grunt.loadNpmTasks("grunt-contrib-stylus");
 
     // register
-    grunt.registerTask('default', ['uglify']);
+    grunt.registerTask('default', ['uglify', 'stylus']);
 }

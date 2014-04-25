@@ -221,6 +221,25 @@ function gradeBook($, window, document) {
             editAssessmentElem.removeClass("modal-show");
         }
 
+        function deleteAssessmentHandler() {
+            var _this = $(this),
+                assessmentID = _this.attr("data-aid"),
+                courseID = _this.attr("data-cid"),
+                oldAssessmentElem = $(".assessment-item[data-aid='" + assessmentID + "']");
+
+            var course = courseMap[courseID],
+                assessment = course.assessmentMap[assessmentID];
+
+            oldAssessmentElem.remove();
+            course.deleteAssessment(assessmentID);
+            course.calculateGrades();
+            updateGrade(course);
+
+            if (hasStorageSupport) saveToStorage(courseID, course);
+
+            editAssessmentElem.removeClass("modal-show");
+        }
+
         function addAssessment() {
             var title = newAssessmentTitle.val(),
                 weight = parseFloat(newAssessmentWeight.val()),
@@ -240,7 +259,7 @@ function gradeBook($, window, document) {
                 assessment = new Assessment(title, weight, result, resultTotal);
 
             course.insertAssessment(assessment);
-            localStorage.setItem(cid, JSON.stringify(course));
+            if (hasStorageSupport) saveToStorage(cid, course);
             updateGrade(course);
 
 
@@ -373,12 +392,12 @@ function gradeBook($, window, document) {
 
             // remove existing grade classes
             classes = classes.split(" ")[0];
-            
-            if (grade === -1) {
+            gradeContainer.attr("class", classes);
+
+            if (grade === -1 || isNaN(grade) || grade === null) {
                 gradeElem.text("--%");
             } else {
                 gradeElem.text(parseFloat(course.currentGrade).toFixed(2) + "%");
-                gradeContainer.attr("class", classes);
                 gradeContainer.addClass(gradeClass);
             }
         }
@@ -468,6 +487,7 @@ function gradeBook($, window, document) {
 
         addAssessmentElem.on('click', "#save-assessment", addAssessment);
         editAssessmentElem.on('click', "#update-assessment", updateAssessmentHandler);
+        editAssessmentElem.on('click', "#delete-assessment", deleteAssessmentHandler);
         courseSummaryElem.on('keyup', 'input#target-grade', targetGradeHandler);
         
         // click-to-edit function for titles
@@ -541,6 +561,13 @@ function gradeBook($, window, document) {
         this.calculateGrades();
     };
 
+    Course.prototype.deleteAssessment = function(id) {
+        var index = this.assessments.indexOf(id);
+
+        this.assessments.splice(index, 1);
+        delete this.assessmentMap[id];
+    };
+
     Course.prototype.calculateGrades = function() {
         var resultSum = 0,
             totalSum = 0;
@@ -551,8 +578,6 @@ function gradeBook($, window, document) {
             resultSum += a.getWeightedResult();
             totalSum += a.weight;
         }
-
-        console.log("resultSum " + resultSum + " ; totalSum " + totalSum);
 
         this.totalGrade = resultSum;
         this.currentGrade = (resultSum / totalSum) * 100;

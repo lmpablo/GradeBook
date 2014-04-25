@@ -117,8 +117,8 @@ function gradeBook($, window, document) {
 
         function createCourse(course) {
             var newCourse = $(emptyCourseTemplate),
-                title = course.title === "" ? "[Course Title]" : course.title,
-                code = course.code === "" ? "[Course Code]" : course.code;
+                title = course.title === "" ? "Untitled Course" : course.title,
+                code = course.code === "" ? "Course Code" : course.code;
             
             if (courseCollection.indexOf(course.id) === -1) {
                 courseCollection.push(course.id);

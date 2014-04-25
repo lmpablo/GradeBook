@@ -490,8 +490,6 @@ function gradeBook($, window, document) {
             hasStorageSupport = true;
             startApp();
         }
-
-        window.courseMap = courseMap;
     });
 
     var courseIDCounter = 1,
@@ -503,11 +501,11 @@ function gradeBook($, window, document) {
                 "<div class='content-container'>" + 
                     "<div class='course-title-container'>" +
                         "<span class='course-title first-time contenteditable' " + 
-                            "data-default-text='[Course Title]' contenteditable='true'>[Course Title]</span>" + 
+                            "contenteditable='true'>[Course Title]</span>" + 
                     "</div>" +
                     "<div class='course-code-container'>" + 
                         "<span class='course-code first-time contenteditable' " + 
-                            "data-default-text='[Course Code]' contenteditable='true'>[Course Code]</span>" + 
+                            "contenteditable='true'>[Course Code]</span>" + 
                     "</div>" +
                     "<div class='add-assessment-container'>" +
                         "<span class='add-assessment button button-round'>+ Add an Assessment</span>" + 

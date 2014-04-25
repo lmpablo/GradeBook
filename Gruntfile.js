@@ -20,13 +20,24 @@ module.exports = function(grunt) {
                     'public/stylesheets/style.css': 'public/stylus/style.styl'
                 }
             }
+        },
+        watch: {
+            js: {
+                files: "public/scripts/src/*.js",
+                tasks: 'uglify'
+            },
+            css: {
+                files: "public/stylus/*.styl",
+                tasks: 'stylus'
+            }
         }
     });
 
     // load tasks
+    grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-contrib-stylus");
 
     // register
-    grunt.registerTask('default', ['uglify', 'stylus']);
+    grunt.registerTask('default', 'watch');
 }

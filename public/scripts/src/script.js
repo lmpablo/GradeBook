@@ -464,7 +464,7 @@ function gradeBook($, window, document) {
                 .on('click', '.add-assessment', addModalHandler)
                 .on('click', '.assessment-item', editModalHandler)
                 .on('click', '#modal-close, .modal-overlay', closeModalHandler)
-                .on('click', '.grade-container', courseSummaryHandler);
+                .on('click', '.course-summary, .grade-container', courseSummaryHandler);
 
         addAssessmentElem.on('click', "#save-assessment", addAssessment);
         editAssessmentElem.on('click', "#update-assessment", updateAssessmentHandler);
@@ -507,8 +507,9 @@ function gradeBook($, window, document) {
                         "<span class='course-code first-time contenteditable' " + 
                             "contenteditable='true'>[Course Code]</span>" + 
                     "</div>" +
-                    "<div class='add-assessment-container'>" +
-                        "<span class='add-assessment button button-round'>+ Add an Assessment</span>" + 
+                    "<div class='button-group'>" +
+                        "<span class='add-assessment button button-charcoal'>+ New Assessment</span> " +
+                        "<span class='course-summary button button-charcoal'>Course Summary</span>" +
                     "</div>" +
                     "<div class='assessments-container clearfix'></div>" + 
                 "</div>" + 

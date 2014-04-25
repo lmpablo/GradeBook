@@ -508,8 +508,8 @@ function gradeBook($, window, document) {
                             "contenteditable='true'>[Course Code]</span>" + 
                     "</div>" +
                     "<div class='button-group'>" +
-                        "<span class='add-assessment button button-charcoal'>+ New Assessment</span> " +
-                        "<span class='course-summary button button-charcoal'>Course Summary</span>" +
+                        "<span class='add-assessment button button-charcoal'><i class='fa fa-plus-circle'></i> New Assessment</span> " +
+                        "<span class='course-summary button button-charcoal'><i class='fa fa-bar-chart-o'></i> Course Summary</span>" +
                     "</div>" +
                     "<div class='assessments-container clearfix'></div>" + 
                 "</div>" + 

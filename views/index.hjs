@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>{{ title }}</title>
-    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:300,400,700' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Lora:400,700' rel='stylesheet' type='text/css'>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
@@ -78,6 +78,22 @@
                     <div class="button-container">
                         <button id="update-assessment" data-aid="-1" data-cid="-1" class="modal-button button-secondary"><i class='fa fa-floppy-o'></i> Save Item</button> <button id="modal-close" class="modal-button button-cancel">Cancel</button> 
                         <button id="delete-assessment" data-aid="-1" data-cid="-1" class="modal-button button-grey"><i class='fa fa-trash-o'></i> Delete Item</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-window effect-slide-left" id="delete-course-modal">
+        <div class="modal-content">
+            <h3 class="modal-title red"><i class="fa fa-trash-o"></i> Delete a Course</h3>
+            <div>
+                <div class="row">
+                    Are you sure you want to delete this course?
+                </div>
+                <div class="row">
+                    <div class="button-container">
+                        <button id="delete-course" data-cid="-1" class="modal-button button-cancel"><i class='fa fa-trash-o'></i> Yes</button> 
+                        <button id="modal-close" class="modal-button button-primary">No</button>
                     </div>
                 </div>
             </div>

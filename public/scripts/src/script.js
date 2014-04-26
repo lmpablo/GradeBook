@@ -15,6 +15,7 @@ function gradeBook($, window, document) {
             // modal windows
             addAssessmentElem = $("#add-assessment-modal"),
             editAssessmentElem = $("#edit-assessment-modal"),
+            deleteCourseElem = $("#delete-course-modal"),
             courseSummaryElem = $("#course-summary"),
             // input fields -- add item
             newAssessmentTitle = addAssessmentElem.find("input#assessment-title"),
@@ -339,6 +340,29 @@ function gradeBook($, window, document) {
             }
         }
 
+        function deleteModalHandler() {
+            var _this = $(this),
+                courseID = _this.parents(".course-item-container").attr("data-cid");
+
+            deleteCourseElem.find("#delete-course").attr("data-cid", courseID);
+            deleteCourseElem.addClass("modal-show");
+        }
+
+        function deleteCourseHandler() {
+            var _this = $(this),
+                courseID = _this.attr("data-cid"),
+                courseElem = $(".course-item-container[data-cid='" + courseID + "']"),
+                index = courseCollection.indexOf(courseID);
+
+            courseCollection.splice(index, 1);
+            delete courseMap[courseID];
+            courseElem.remove();
+
+            saveToStorage("courseCollection", courseCollection);
+            localStorage.removeItem(courseID);
+            deleteCourseElem.removeClass("modal-show");
+        }
+
         function closeModalHandler() {
             $(".modal-window").removeClass("modal-show");
         }
@@ -483,11 +507,13 @@ function gradeBook($, window, document) {
                 .on('click', '.add-assessment', addModalHandler)
                 .on('click', '.assessment-item', editModalHandler)
                 .on('click', '#modal-close, .modal-overlay', closeModalHandler)
+                .on('click', '.delete-course', deleteModalHandler)
                 .on('click', '.course-summary, .grade-container', courseSummaryHandler);
 
         addAssessmentElem.on('click', "#save-assessment", addAssessment);
         editAssessmentElem.on('click', "#update-assessment", updateAssessmentHandler);
         editAssessmentElem.on('click', "#delete-assessment", deleteAssessmentHandler);
+        deleteCourseElem.on('click', "#delete-course", deleteCourseHandler);
         courseSummaryElem.on('keyup', 'input#target-grade', targetGradeHandler);
         
         // click-to-edit function for titles
@@ -529,12 +555,14 @@ function gradeBook($, window, document) {
                     "</div>" +
                     "<div class='button-group'>" +
                         "<span class='add-assessment button button-charcoal'><i class='fa fa-plus-circle'></i> New Assessment</span> " +
-                        "<span class='course-summary button button-charcoal'><i class='fa fa-bar-chart-o'></i> Course Summary</span>" +
+                        "<span class='course-summary button button-charcoal'><i class='fa fa-bar-chart-o'></i> Course Summary</span> " +
+                        "<span class='delete-course button button-red' title='Delete Course'><i class='fa fa-trash-o fa-lg'></i></span>" +
                     "</div>" +
                     "<div class='assessments-container clearfix'></div>" + 
                 "</div>" + 
-            "<div class='grade-container'>" +
-                "<span class='grade'>--%</span></div></div>";
+                "<div class='grade-container'>" +
+                    "<span class='grade'>--%</span></div>" +
+            "</div>";
 
     function Course(title, code) {
         this.title = title;

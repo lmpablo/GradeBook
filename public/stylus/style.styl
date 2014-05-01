@@ -17,9 +17,9 @@ shadow_black = #777
 dark_yellow = darken(yellow, 10)
 
 // SCREEN VARIABLES
-small_screen = 600px
-medium_screen = 850px
-large_screen = 1200px
+small_screen = 767px
+medium_screen = 979px
+large_screen = 1199px
 
 // MIXINS-----------------------------------------------
 button(bg-color, c)
@@ -122,6 +122,13 @@ h1
         font-size: 30pt
         -webkit-text-stroke: 1px charcoal
 
+    @media (max-width: small_screen)
+        height: 40px
+
+        h1
+            font-size: 20pt
+            letter-spacing: -2px
+
 #splash-page
     background: white
     border: 1px solid darken(grey, 10)
@@ -142,6 +149,9 @@ h1
     width: 100%
     padding-top: 60px
     padding-left: 15px
+
+    @media (max-width: small_screen)
+        padding-top: 40px
 
 color_list = ( blue orange cyan magenta purple )
 for num in (0..4)
@@ -421,6 +431,9 @@ input[type="text"].edit
     opacity: 0
     visibility: hidden
 
+    @media (max-width: small_screen)
+        background: charcoal
+
 .modal-window
     position: fixed
     top: 50%
@@ -437,6 +450,9 @@ input[type="text"].edit
     -ms-transform: translateX(-50%) translateY(-50%)
     -o-transform: translateX(-50%) translateY(-50%)
     transform: translateX(-50%) translateY(-50%)
+
+    @media (max-width: small_screen)
+        width: 100%
 
 .modal-content
     color: charcoal
@@ -455,6 +471,9 @@ input[type="text"].edit
         padding: 15px 15px
         margin: 0
         -webkit-text-stroke: 1px rgba(blue, 0.5)
+
+        @media (max-width: small_screen)
+            font-size: 18pt
 
         &.secondary
             background: rgba(yellow, 0.8)
@@ -475,6 +494,9 @@ input[type="text"].edit
         padding: 15px 20px 30px
         margin: 0
         font-size: 14pt
+
+        @media (max-width: small_screen)
+            font-size: 12pt
 
         .row
             width: 100%
